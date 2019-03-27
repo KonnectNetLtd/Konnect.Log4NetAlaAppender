@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Konnect.Log4NetAlaAppender")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Log4Net appender for Azure Log Analytics")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Konnect Net Ltd")]
 [assembly: AssemblyProduct("Konnect.Log4NetAlaAppender")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]

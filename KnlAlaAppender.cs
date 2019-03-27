@@ -19,15 +19,28 @@ namespace Konnect.Log4NetAzureLogAnalytics
         public string LogType { get; set; }
         public string ApiVersion {get; set;} = "2016-04-01";
         public bool EnableDebugLog { get; set; } = false;
+
+        public string DebugLogFile { get; set; } 
+
         
         [Obsolete]
         public bool EnableConsoleLog { get; set; } = false;
         
+        
+        public bool IsEnabled { get; set; } = true;
+         
 
         private void DebugLog(string message)
         {
             if (EnableConsoleLog || EnableDebugLog)
             {
+                if (!string.IsNullOrWhiteSpace(DebugLogFile))
+                {
+                    using (var sw = File.AppendText(DebugLogFile))
+                    {
+                        sw.WriteLine(message);
+                    }
+                }
                 Console.WriteLine(message);
                 Debug.WriteLine(message);
             }
@@ -35,6 +48,7 @@ namespace Konnect.Log4NetAzureLogAnalytics
 
         protected override void SendBuffer(LoggingEvent[] events)
         {
+            if (!IsEnabled) return;
             DebugLog("Invoking SendBufferAsync");
             Task.Run(() => SendBufferAsync(events));
         }
@@ -74,7 +88,7 @@ namespace Konnect.Log4NetAzureLogAnalytics
                 var request = (HttpWebRequest) WebRequest.Create(requestUriString);
                 request.ContentType = "application/json";
                 request.Method = "POST";
-                request.Headers["Log-Type"] = LogType;
+                request.Headers["Log-Type"] = LogType.Replace(" ", "");
                 request.Headers["x-ms-date"] = dateString;
                 request.Headers["Authorization"] = signature;
                 var content = Encoding.UTF8.GetBytes(json);
