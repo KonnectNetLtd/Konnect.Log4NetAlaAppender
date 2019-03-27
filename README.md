@@ -41,6 +41,9 @@ Add this appender description in your Log4Net configuration:
 </appender>
 ```
 
+Please note, that if #{YourLogType} includes a space, it will be stripped - otherwise, ALA API will return an error. 
+Any other whitespace characters are not stripped, so please be careful.
+
 And then, add you can reference this logger from the logger configuration - for example:
 
 ```xml
@@ -61,4 +64,29 @@ There is a Debug feature, in case there is a problem with connectivity - you can
 ```
 
 The debug output will be sent to the Console as well as the Debug output, which can be viewed through tools such as [SysInternal's DebugView](https://docs.microsoft.com/en-us/sysinternals/downloads/debugview)
+
+If you're trying to troubleshoot this in a release environment, the Debug output will be disabled. You can use the Debug log file feature, like this:
+
+```xml
+<appender name="AzureLogAppender" type="Konnect.Log4NetAzureLogAnalytics.KnlAlaAppender, Konnect.Log4NetAlaAppender">
+  <WorkspaceId>#{YourWorkspaceId}</WorkspaceId>
+  ...
+  <EnableDebugLog>true</EnableDebugLog>
+  <DebugLogFile>C:\temp\ALAAppenderLog.log</DebugLogFile>
+</appender>
+
+``` 
+
+There is also the master switch, which is enabled by default if the element is missing. This is useful for temporarily stopping logging. 
+
+```xml
+<appender name="AzureLogAppender" type="Konnect.Log4NetAzureLogAnalytics.KnlAlaAppender, Konnect.Log4NetAlaAppender">
+  ...
+  <IsEnabled>false</IsEnabled>
+  ...
+</appender>
+
+``` 
+
+
 
